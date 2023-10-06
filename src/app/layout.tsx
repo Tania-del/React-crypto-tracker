@@ -2,15 +2,23 @@
 import ThemeProvider from "@/providers/ThemeProvider";
 import "./globals.css";
 import type { Metadata } from "next";
-import { Montserrat } from "next/font/google";
-import { CssBaseline, styled } from "@mui/material";
+import { Montserrat, Roboto } from "next/font/google";
+import { CssBaseline } from "@mui/material";
+import 'react-alice-carousel/lib/alice-carousel.css';
 
 
-const motserrat = Montserrat({
+
+const montserrat = Montserrat({
   subsets: ["latin"],
   weight: ["300", "400", "800"],
   variable: "--montserrat",
 });
+
+const roboto = Roboto({
+   subsets: ["latin"],
+  weight: ["400", "500", "700"],
+  variable: "--roboto"
+})
 
 const metadata: Metadata = {
   title: "Create Next App",
@@ -25,17 +33,12 @@ export default function RootLayout({
   children: React.ReactNode;
   }) {
   
-  // const Body = styled('body') (
-  //   ({ theme }) => `
-  //   background-color: ${theme.palette.primary.dark}
-  //   `
-  // )
   
   return (
     <ThemeProvider>
       <CssBaseline enableColorScheme />
       <html lang="en">
-        <body className={motserrat.className}>{children}</body>
+        <body className={`${montserrat.variable} ${roboto.variable}`}>{children} </body>
       </html>
     </ThemeProvider>
   );

@@ -1,13 +1,19 @@
 'use client'
 import Banner from "@/components/Banner/Banner";
+import CoinsTable from "@/components/CoinsTable";
 import Header from "@/components/Header";
+import CryptoContext from "@/context/CryptoContext";
+
 
 
 export default function Home() {
   return (
-      <div>
+    <div>
+      <CryptoContext>
       <Header />
-      <Banner />
+        <Banner />
+        <CoinsTable />
+      </CryptoContext>
       </div>
    
   )

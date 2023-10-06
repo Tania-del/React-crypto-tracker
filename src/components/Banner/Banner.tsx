@@ -12,19 +12,19 @@ const Typography = styled(MUITypography)(
     `
 )
   
-
-
   return (
     <>
     <div>
           <div style={{background: 'url(./banner2.jpg)'}}>
-        <Container sx={{ height: '400px', display: 'flex', flexDirection: 'column', paddingTop: '25px', justifyContent: 'space-around', textAlign: 'center' }}>
-        <Typography variant='h2'> 
+          <Container sx={{ height: '400px', display: 'flex', flexDirection: 'column', paddingTop: '25px', justifyContent: 'space-around', textAlign: 'center' }}>
+            <div>
+        <Typography variant='h2' sx={{ marginBottom: '15px'}}> 
           Crypto Hunter
             </Typography>
-            <Typography variant='subtitle2' sx={{ color: 'darkgrey', textTransform: 'capitalize', fontWeight: '300'}}>
+            <Typography variant='subtitle2' sx={{ color: 'darkgrey', textTransform: 'capitalize', fontWeight: '300', marginBottom: '20px'}}>
               Get all the Info regarding your favorite Crypto Currency
             </Typography>
+            </div>
 
             <Carousel  />
       </Container>
