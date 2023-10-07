@@ -56,7 +56,6 @@ const Carousel = () => {
   }
 
   const items = trending.map((coin: CoinType) => {
-    console.log('coin: ', coin);
 
     const profit = coin.price_change_percentage_24h;
     const isPlus = profit > 0;
