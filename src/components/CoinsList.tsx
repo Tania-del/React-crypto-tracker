@@ -39,11 +39,8 @@ const CoinsList = () => {
   const [page, setPage] = useState<number>(1)
   const { symbol } = useContext(CryptoContext)
   const router = useRouter()
-  // const searchParams = useSearchParams()
   const classes = useStyles()
-   const params = useCustomSearchParams();
-    console.log('paramsCustom: ', params.toString());
-     
+   const params = useCustomSearchParams();     
   
   const fetchCoins = async () => {
       setLoading(true)
