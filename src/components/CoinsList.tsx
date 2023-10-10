@@ -9,6 +9,7 @@ import { TextField, Typography, Container, TableContainer, Table, TableHead, Lin
 import { makeStyles } from '@mui/styles'
 import axios from 'axios'
 import clsx from 'clsx'
+import { log } from 'console'
 import { useParams, useRouter } from 'next/navigation'
 import React, { useContext, useEffect, useState } from 'react'
 
@@ -35,6 +36,7 @@ const CoinsList = () => {
   const [coins, setCoins] = useState<CoinType[]>([])
   const [loading, setLoading] = useState<boolean>(false)
   const [search, setSearch] = useState<string>('')
+  const [page, setPage] = useState<number>(1)
   const { symbol } = useContext(CryptoContext)
   const router = useRouter()
   // const searchParams = useSearchParams()
@@ -120,10 +122,13 @@ const CoinsList = () => {
             </TableHead>
             
             <TableBody>
-              {handleSearch().map((row) => { 
+              {handleSearch()
+                .slice((page - 1) * 10, (page - 1) * 10 + 10)
+                .map((row) => { 
                 const profit = row.price_change_percentage_24h;
                 const isPlus = profit > 0;
-
+               
+                
                 return (
                   <TableRow
                     onClick={() => router.push(`coins/${row.id}`)}
@@ -151,7 +156,7 @@ const CoinsList = () => {
                     </TableCell>
 
                     <TableCell sx={{ textAlign: 'right' }}
-                 className={clsx('font-medium', (isPlus) ? 'text-green-500' : 'text-rose-600')} 
+                 className={clsx('font-medium', isPlus ? 'text-green-500' : 'text-rose-600')} 
                    >
                                 {isPlus && "+"}{`${profit.toFixed(2)}%`}
                     </TableCell>
@@ -169,7 +174,13 @@ const CoinsList = () => {
 
       <Pagination
         sx={{ padding: '20px', width: '100%', display: 'flex', justifyContent: 'center' }}
-        count={(handleSearch()?.length / 10).toFixed(0)}
+        count={Number((handleSearch()?.length / 10).toFixed(0))}
+        classes={{ ul: classes.pagination }}
+        onChange={(_, number) => {
+          setPage(number);
+
+          window.scroll(0, 450)
+        }}
       />
     </Container>
   )
