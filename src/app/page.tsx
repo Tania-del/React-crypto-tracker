@@ -6,6 +6,7 @@ import CryptoContext from "@/context/CryptoContext";
 
 
 
+
 export default function Home() {
   return (
     <div>

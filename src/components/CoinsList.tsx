@@ -2,22 +2,47 @@
 'use client'
 import { CoinList } from '@/config/api'
 import { CryptoContext } from '@/context/CryptoContext'
+import useCustomSearchParams from '@/hooks/useCustomSearchParams'
+// import { useCustomSearchParams } from '@/hooks/useCustomSearchParams'
 import { CoinType } from '@/type/CoinType'
-import { TextField, Typography, Container, TableContainer, Table, TableHead, LinearProgress, TableRow, TableCell, TableBody, colors } from '@mui/material'
+import { TextField, Typography, Container, TableContainer, Table, TableHead, LinearProgress, TableRow, TableCell, TableBody, Pagination } from '@mui/material'
+import { makeStyles } from '@mui/styles'
 import axios from 'axios'
 import clsx from 'clsx'
-import { useRouter } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import React, { useContext, useEffect, useState } from 'react'
 
+
+ const useStyles = makeStyles({
+    row: {
+      backgroundColor: "#16171a",
+      cursor: "pointer",
+      "&:hover": {
+        backgroundColor: "#131111",
+      },
+      fontFamily: "Montserrat",
+    },
+    pagination: {
+      "& .MuiPaginationItem-root": {
+        color: "gold",
+      },
+    },
+ });
+  
 
 const CoinsList = () => {
   const { currency } = useContext(CryptoContext)
   const [coins, setCoins] = useState<CoinType[]>([])
   const [loading, setLoading] = useState<boolean>(false)
   const [search, setSearch] = useState<string>('')
-  const router = useRouter()
   const { symbol } = useContext(CryptoContext)
-
+  const router = useRouter()
+  // const searchParams = useSearchParams()
+  const classes = useStyles()
+   const params = useCustomSearchParams();
+    console.log('paramsCustom: ', params.toString());
+     
+  
   const fetchCoins = async () => {
       setLoading(true)
     const { data } = await axios.get(CoinList(currency))
@@ -27,17 +52,38 @@ const CoinsList = () => {
     }
 
   useEffect(() => {
-    fetchCoins() 
-    console.log(coins);
-    
+    fetchCoins()     
     }, [currency])
+  
+  
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    setSearch(value)
+
+    if (!value) {
+      params.delete('text')      
+    } else {
+      params.set('text', value)
+    }
+
+    const queryString = params.toString()
+    
+    router.push(queryString ? `?${queryString}` : '/')
+  }
   
   const handleSearch = () => {
     return coins.filter((coin) => coin.name.toLowerCase().includes(search) ||
       coin.symbol.toLowerCase().includes(search))
   }
 
-  
+
+
+  useEffect(() => {    
+    const value = params.get('text') 
+
+    setSearch(value || '')
+    
+  }, [])
 
   return (
       <Container sx={{ textAlign: 'center'}}>
@@ -45,11 +91,13 @@ const CoinsList = () => {
           Cryptocurrency Prices by Market Cap
         </Typography>  
         
-        <TextField
+      <TextField
+          name=''
+          value={search}
           label='Search For a Crypto Currency..'
           variant='outlined'
           sx={{ marginBottom: '20px', width: '100%' }}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={handleInputChange}
         />
 
       <TableContainer>
@@ -63,6 +111,7 @@ const CoinsList = () => {
                   <TableCell sx={{ color: 'black', fontWeight: '700', fontFamily: 'var(--montserrat)'}}
 
                     key={head}
+                  align={head === "Coin" ? undefined : "right"}
                   >
                     {head}
                   </TableCell>
@@ -71,22 +120,25 @@ const CoinsList = () => {
             </TableHead>
             
             <TableBody>
-              {handleSearch().map((row) => {
-                console.log(row);
-                
+              {handleSearch().map((row) => { 
+                const profit = row.price_change_percentage_24h;
+                const isPlus = profit > 0;
+
                 return (
                   <TableRow
-                    onClick={() => router.push(`/coins/${row.id}`)}
+                    onClick={() => router.push(`coins/${row.id}`)}
                     key={row.name}
-                  >
+                    className={classes.row}
+
+                    >
                     <TableCell
                       component="th"
                       scope='row'
-                      sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center'}}
+                      sx={{ display: 'flex', gap: '15px'}}
                     >
+                      <div style={{ display: 'flex', flexDirection: 'column'}}>
                       <img src={row.image} alt={row.name} className='mb-[10px] max-h-[50px]' />
                       
-                      <div style={{ display: 'flex', flexDirection: 'column'}}>
                         <span style={{ textTransform: 'uppercase', fontSize: '22px'}}>{row.symbol}</span>
                         <span style={{ color: "darkgrey"}}>{row.name}</span>
 
@@ -99,14 +151,14 @@ const CoinsList = () => {
                     </TableCell>
 
                     <TableCell sx={{ textAlign: 'right' }}
-                 className={clsx('font-medium', (row.price_change_percentage_24h > 0) ? 'text-green-500' : 'text-rose-600')} 
+                 className={clsx('font-medium', (isPlus) ? 'text-green-500' : 'text-rose-600')} 
                    >
-                                {row.price_change_percentage_24h > 0 && "+"}{`${row.price_change_percentage_24h.toFixed(2)}%`}
+                                {isPlus && "+"}{`${profit.toFixed(2)}%`}
                     </TableCell>
 
                     <TableCell sx={{ textAlign: 'right'}}>
                       {symbol}{' '}
-                      {row.market_cap.toLocaleString()}
+                      {row.market_cap.toLocaleString().slice(0, -6)}M
                     </TableCell>
                       </TableRow>
                     )
@@ -114,6 +166,11 @@ const CoinsList = () => {
             </TableBody>
         </Table>)}
       </TableContainer>
+
+      <Pagination
+        sx={{ padding: '20px', width: '100%', display: 'flex', justifyContent: 'center' }}
+        count={(handleSearch()?.length / 10).toFixed(0)}
+      />
     </Container>
   )
 }
