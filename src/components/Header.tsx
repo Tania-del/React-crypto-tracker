@@ -17,7 +17,8 @@ const Typography = styled(MUITypography)(
        
     `
 )
-  
+
+    
     return (
         <AppBar sx={{ backgroundImage: 'none', backgroundColor: 'transparent' }} position='static' >
             <Container>
@@ -29,7 +30,7 @@ const Typography = styled(MUITypography)(
                         value={currency}
                         variant='outlined'
                         sx={{ width: '100px', height: '40px', marginRight: '15px' }}
-                        onChange={(e) => setCurrency(e.target.value)}
+                        onChange={(e) => { console.log('hello', e.target.value); setCurrency(e.target.value) }}
                     >
                         <MenuItem value={'USD'}>USD</MenuItem>
                         <MenuItem value={'INR'}>INR</MenuItem>

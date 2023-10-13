@@ -9,8 +9,7 @@ import { TextField, Typography, Container, TableContainer, Table, TableHead, Lin
 import { makeStyles } from '@mui/styles'
 import axios from 'axios'
 import clsx from 'clsx'
-import { log } from 'console'
-import { useParams, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import React, { useContext, useEffect, useState } from 'react'
 
 

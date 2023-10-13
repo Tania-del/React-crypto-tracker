@@ -1,16 +1,26 @@
 export interface CoinInfoType {
-    id: string,
-    image: {
-        large: string,
-        small: string,
-        thumb: string,
-    },
-    name: string,
-    description: {
-        en: string,
+  [x: string]: any;
+  id: string;
+  image: {
+    large: string;
+    small: string;
+    thumb: string;
+  };
+  name: string;
+  description: {
+    en: string;
+  };
+  market_cap_rank: number;
+
+
+  market_data: {
+    current_price: {
+      usd: number;
+      inr: number;
     }
-    market_cap_rank: number,
-    market_data: {
-        current_price: number,
+    market_cap: {
+      usd: number;
+      inr: number;
     }
+  }
 }

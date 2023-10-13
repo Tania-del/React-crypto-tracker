@@ -26,9 +26,6 @@ const CryptoProvider: FC<ICryptoProvider> = ({ children }) => {
         }
     }, [currency])
     
-    
-
-
   return (
       <CryptoContext.Provider value={{ setCurrency, currency, symbol }}>{children}</CryptoContext.Provider>
   )

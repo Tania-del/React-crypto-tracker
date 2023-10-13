@@ -2,15 +2,14 @@
 'use client'
 import Header from '@/components/Header'
 import { SingleCoin } from '@/config/api';
-import { LinearProgress, Typography } from '@mui/material';
+import { LinearProgress, ThemeProvider, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import axios from 'axios';
 import { useParams } from 'next/navigation'
 import React, { useContext, useEffect, useState } from 'react'
 import { CoinInfoType } from '@/type/CoinInfoType';
 import { CryptoContext } from '@/context/CryptoContext';
-// import ReactHtmlParser from "react-html-parser";
-
+import CoinInfo from '@/components/CoinInfo';
 
 
  const useStyles = makeStyles((theme: any) => ({
@@ -45,20 +44,22 @@ import { CryptoContext } from '@/context/CryptoContext';
       paddingTop: 0,
       textAlign: "justify",
     },
-    marketData: {
-      alignSelf: "start",
+   marketData: {
+     alignSelf: "start",
       padding: 25,
       paddingTop: 10,
       width: "100%",
       [theme.breakpoints.down("md")]: {
         display: "flex",
         justifyContent: "space-around",
+        flexDirection: 'column',
+        alignItems: 'center',
       },
       [theme.breakpoints.down("sm")]: {
         flexDirection: "column",
-        alignItems: "center",
+        alignItems: "start",
       },
-      [theme.breakpoints.down("xs")]: {
+     [theme.breakpoints.down("xs")]: {
         alignItems: "start",
       },
     },
@@ -70,6 +71,7 @@ const CoinPage = () => {
   const [coin, setCoin] = useState<CoinInfoType>();
   const classes = useStyles()
   const { currency, symbol } = useContext(CryptoContext)
+  
   
   const fetchCoin = async () => {
     const { data } = await axios.get(SingleCoin(coinId));
@@ -83,11 +85,14 @@ const CoinPage = () => {
   }, [])
 
 
-  console.log('COIN: ', coin);
-  
+  const currentPrice = coin?.market_data.current_price[currency.toLowerCase() as keyof typeof coin.market_data.current_price]
+  const marketCap = coin?.market_data.market_cap[currency.toLowerCase() as keyof typeof coin.market_data.market_cap]
+ 
   if (!coin) return <LinearProgress style={{ backgroundColor: "gold" }} />;
   return (
-    <><Header />
+    <>
+      <div style={{ backgroundColor: '#14161a'}}>
+      <Header />
       <div className={classes.container}>
         <div className={classes.sidebar}>
           <img
@@ -122,13 +127,28 @@ const CoinPage = () => {
               &nbsp; &nbsp;
               <Typography variant='h5' sx={{ fontFamily: 'var(--montserrat)'}}>
                 {symbol}{' '}
+                {currentPrice?.toLocaleString()}
+              </Typography>
+            </span>
+            
+            <span style={{ display: 'flex' }}>
+              <Typography variant='h5'  className={classes.heading}>
+                Market Cap:
+              </Typography>
+              &nbsp; &nbsp;
+              <Typography variant='h5' sx={{ fontFamily: 'var(--montserrat)'}}>
+                {symbol}{' '}
+                {marketCap?.toLocaleString().slice(0, -6)}
               </Typography>
             </span>
           </div>
         </div>
+        {/* chart */}
+        <CoinInfo coin={coin} />
+      </div>
       </div>
     </>
   )
 }
 
-export default CoinPage
+export default CoinPage;
