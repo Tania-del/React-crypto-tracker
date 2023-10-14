@@ -65,12 +65,12 @@ const CoinsList = () => {
     setSearch(value);
 
     if (!value) {
-      params.delete("text");
+      params?.delete?.("text");
     } else {
-      params.set("text", value);
+      params?.set?.("text", value);
     }
 
-    const queryString = params.toString();
+    const queryString = params?.toString?.();
 
     router.push(queryString ? `?${queryString}` : "/");
   };
@@ -84,7 +84,7 @@ const CoinsList = () => {
   };
 
   useEffect(() => {
-    const value = params.get("text");
+    const value = params?.get?.("text");
 
     setSearch(value || "");
   }, []);
@@ -205,7 +205,9 @@ const CoinsList = () => {
         count={Number((handleSearch()?.length / 10).toFixed(0))}
         onChange={(_, number) => {
           setPage(number);
-          window.scroll(0, 450);
+          if (typeof window !== 'undefined') {
+            window.scroll(0, 450);
+          }
         }}
       />
     </Container>
