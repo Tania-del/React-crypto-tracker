@@ -39,19 +39,19 @@ const CoinsList = () => {
   const { symbol } = useContext(CryptoContext)
   const router = useRouter()
   const classes = useStyles()
-   const params = useCustomSearchParams();     
+  const params = useCustomSearchParams();
   
   const fetchCoins = async () => {
-      setLoading(true)
+    setLoading(true)
     const { data } = await axios.get(CoinList(currency))
     
     setCoins(data)
     setLoading(false)
-    }
+  }
 
   useEffect(() => {
-    fetchCoins()     
-    }, [currency])
+    fetchCoins()
+  }, [currency])
   
   
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -59,7 +59,7 @@ const CoinsList = () => {
     setSearch(value)
 
     if (!value) {
-      params.delete('text')      
+      params.delete('text')
     } else {
       params.set('text', value)
     }
@@ -76,96 +76,96 @@ const CoinsList = () => {
 
 
 
-  useEffect(() => {    
-    const value = params.get('text') 
+  useEffect(() => {
+    const value = params.get('text')
 
     setSearch(value || '')
     
   }, [])
 
   return (
-      <Container sx={{ textAlign: 'center'}}>
-      <Typography variant='h4' sx={{ fontFamily: 'var(--montserrat)', margin: '15px'}}>
-          Cryptocurrency Prices by Market Cap
-        </Typography>  
+    <Container sx={{ textAlign: 'center' }}>
+      <Typography variant='h4' sx={{ fontFamily: 'var(--montserrat)', margin: '15px' }}>
+        Cryptocurrency Prices by Market Cap
+      </Typography>
         
       <TextField
-          name=''
-          value={search}
-          label='Search For a Crypto Currency..'
-          variant='outlined'
-          sx={{ marginBottom: '20px', width: '100%' }}
-          onChange={handleInputChange}
-        />
+        name=''
+        value={search}
+        label='Search For a Crypto Currency..'
+        variant='outlined'
+        sx={{ marginBottom: '20px', width: '100%' }}
+        onChange={handleInputChange}
+      />
 
       <TableContainer>
         {loading ?
-          (<LinearProgress sx={{ backgroundColor: 'gold'}} />)
+          (<LinearProgress sx={{ backgroundColor: 'gold' }} />)
           :
           (<Table>
-            <TableHead sx={{ backgroundColor: 'rgb(238, 188, 29)'}}>
+            <TableHead sx={{ backgroundColor: 'rgb(238, 188, 29)' }}>
               <TableRow>
                 {['Coin', 'Price', '24h Change', 'Market Cup'].map((head) => (
-                  <TableCell sx={{ color: 'black', fontWeight: '700', fontFamily: 'var(--montserrat)'}}
+                  <TableCell sx={{ color: 'black', fontWeight: '700', fontFamily: 'var(--montserrat)' }}
 
                     key={head}
-                  align={head === "Coin" ? undefined : "right"}
+                    align={head === "Coin" ? undefined : "right"}
                   >
                     {head}
                   </TableCell>
-               ))}
+                ))}
               </TableRow>
             </TableHead>
             
             <TableBody>
               {handleSearch()
                 .slice((page - 1) * 10, (page - 1) * 10 + 10)
-                .map((row) => { 
-                const profit = row.price_change_percentage_24h;
-                const isPlus = profit > 0;
+                .map((row) => {
+                  const profit = row.price_change_percentage_24h;
+                  const isPlus = profit > 0;
                
                 
-                return (
-                  <TableRow
-                    onClick={() => router.push(`coins/${row.id}`)}
-                    key={row.name}
-                    className={classes.row}
+                  return (
+                    <TableRow
+                      onClick={() => router.push(`coins/${row.id}`)}
+                      key={row.name}
+                      className={classes.row}
 
                     >
-                    <TableCell
-                      component="th"
-                      scope='row'
-                      sx={{ display: 'flex', gap: '15px'}}
-                    >
-                      <div style={{ display: 'flex', flexDirection: 'column'}}>
-                      <img src={row.image} alt={row.name} className='mb-[10px] max-h-[50px]' />
+                      <TableCell
+                        component="th"
+                        scope='row'
+                        sx={{ display: 'flex', gap: '15px' }}
+                      >
+                        <div style={{ display: 'flex', flexDirection: 'column' }}>
+                          <img src={row.image} alt={row.name} className='mb-[10px] max-h-[50px]' />
                       
-                        <span style={{ textTransform: 'uppercase', fontSize: '22px'}}>{row.symbol}</span>
-                        <span style={{ color: "darkgrey"}}>{row.name}</span>
+                          <span style={{ textTransform: 'uppercase', fontSize: '22px' }}>{row.symbol}</span>
+                          <span style={{ color: "darkgrey" }}>{row.name}</span>
 
-                      </div>
-                    </TableCell>
+                        </div>
+                      </TableCell>
                     
-                    <TableCell sx={{ textAlign: 'right'}}>
-                      {symbol}{' '}
-                      {row.current_price.toLocaleString()}
-                    </TableCell>
+                      <TableCell sx={{ textAlign: 'right' }}>
+                        {symbol}{' '}
+                        {row.current_price.toLocaleString()}
+                      </TableCell>
 
-                    <TableCell sx={{ textAlign: 'right' }}
-                 className={clsx('font-medium', isPlus ? 'text-green-500' : 'text-rose-600')} 
-                   >
-                                {isPlus && "+"}{`${profit.toFixed(2)}%`}
-                    </TableCell>
+                      <TableCell sx={{ textAlign: 'right' }}
+                        className={clsx('font-medium', isPlus ? 'text-green-500' : 'text-rose-600')}
+                      >
+                        {isPlus && "+"}{`${profit.toFixed(2)}%`}
+                      </TableCell>
 
-                    <TableCell sx={{ textAlign: 'right'}}>
-                      {symbol}{' '}
-                      {row.market_cap.toLocaleString().slice(0, -6)}M
-                    </TableCell>
-                      </TableRow>
-                    )
-                  })}
+                      <TableCell sx={{ textAlign: 'right' }}>
+                        {symbol}{' '}
+                        {row.market_cap.toLocaleString().slice(0, -6)}M
+                      </TableCell>
+                    </TableRow>
+                  )
+                })}
             </TableBody>
-        </Table>)}
+          </Table>)}
       </TableContainer>
 
       <Pagination
@@ -180,6 +180,6 @@ const CoinsList = () => {
       />
     </Container>
   )
-}
+};
 
 export default CoinsList;

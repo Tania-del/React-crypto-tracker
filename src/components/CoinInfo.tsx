@@ -58,7 +58,7 @@ ChartJS.register(
 
 const CoinInfo: FC<ICoinInfo> = ({ coin }) => {
   const [historicData, setHistoricData] = useState([]);
-  const [days, setDays] = useState<number>(7)
+  const [days, setDays] = useState<number>(1)
   const { currency } = useContext(CryptoContext);
   const classes = useStyles()
 
@@ -121,6 +121,7 @@ const CoinInfo: FC<ICoinInfo> = ({ coin }) => {
                 marginTop: 20,
                 justifyContent: "space-around",
                 width: "100%",
+                lineHeight: '20px',
               }}
             >
               {chartDays.map((day) => (
@@ -128,7 +129,6 @@ const CoinInfo: FC<ICoinInfo> = ({ coin }) => {
                   key={day.value}
                   onClick={() => {
                     setDays(day.value);
-                    // setflag(false);
                   }}
                   selected={day.value === days}
                 >
@@ -136,7 +136,6 @@ const CoinInfo: FC<ICoinInfo> = ({ coin }) => {
                 </SelectButton>
               ))}
             </div>
-           
           </>
         )}
     </div>
