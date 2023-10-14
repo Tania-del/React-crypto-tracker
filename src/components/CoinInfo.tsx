@@ -2,9 +2,7 @@
 import { HistoricalChart } from '@/config/api';
 import { CryptoContext } from '@/context/CryptoContext';
 import { CoinInfoType } from '@/type/CoinInfoType'
-import { CircularProgress } from '@mui/material';
-
-import { makeStyles } from '@mui/styles';
+import { CircularProgress, styled } from '@mui/material';
 import axios from 'axios';
 import React, { FC, useContext, useEffect, useState } from 'react'
 import { Line } from 'react-chartjs-2';
@@ -21,15 +19,12 @@ import {
 import SelectButton from './SelectButton';
 import { chartDays } from '../config/data'
 
-
-
 interface ICoinInfo {
   coin: CoinInfoType;
 }
 
-const useStyles = makeStyles((theme: any) => ({
-  container: {
-    width: '75%',
+const Container = styled('div')(({ theme }) => ({
+   width: '75%',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -42,7 +37,6 @@ const useStyles = makeStyles((theme: any) => ({
       padding: 20,
       marginTop: 0,
     }
-  }
 }))
 
 ChartJS.register(
@@ -55,13 +49,10 @@ ChartJS.register(
   Legend
 );
 
-
 const CoinInfo: FC<ICoinInfo> = ({ coin }) => {
   const [historicData, setHistoricData] = useState([]);
   const [days, setDays] = useState<number>(1)
   const { currency } = useContext(CryptoContext);
-  const classes = useStyles()
-
   
   const fetchHistoricData = async () => {
     const { data } = await axios.get(HistoricalChart(coin.id, days, currency))
@@ -76,8 +67,7 @@ const CoinInfo: FC<ICoinInfo> = ({ coin }) => {
       
   
   return (
-    <div className={classes.container}>
-    
+    <Container>
       {historicData.length === 0 ? (
         <CircularProgress
           sx={{ color: 'gold' }}
@@ -138,7 +128,7 @@ const CoinInfo: FC<ICoinInfo> = ({ coin }) => {
             </div>
           </>
         )}
-    </div>
+    </Container>
   )
 }
 

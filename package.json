@@ -1,5 +1,5 @@
 {
-  "name": "react-crypto-tracker",
+  "name": "crypto",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -12,18 +12,14 @@
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@mui/material": "^5.14.11",
-    "@mui/styles": "^5.14.11",
-    "@types/faker": "^6.6.9",
     "axios": "^1.5.1",
     "chart.js": "^4.4.0",
     "clsx": "^2.0.0",
-    "faker": "^5.5.3",
     "next": "13.5.4",
-    "react": "^18.2.0",
+    "react": "^18.0.2",
     "react-alice-carousel": "^2.8.0",
     "react-chartjs-2": "^5.2.0",
-    "react-dom": "^18.2.0",
-    "react-html-parser": "^2.0.2"
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@types/node": "^20",

@@ -1,9 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
 'use client'
 import Header from '@/components/Header'
-import { SingleCoin } from '@/config/api';
-import { LinearProgress, ThemeProvider, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { SingleCoin } from '@/config/api'
+import { LinearProgress,  Typography as MUITypography,  styled } from '@mui/material';
 import axios from 'axios';
 import { useParams } from 'next/navigation'
 import React, { useContext, useEffect, useState } from 'react'
@@ -12,16 +11,15 @@ import { CryptoContext } from '@/context/CryptoContext';
 import CoinInfo from '@/components/CoinInfo';
 
 
- const useStyles = makeStyles((theme: any) => ({
-    container: {
-      display: "flex",
+const Div = styled('div')(({ theme }) => ({
+   display: "flex",
       [theme.breakpoints.down("md")]: {
         flexDirection: "column",
         alignItems: "center",
       },
-    },
-    sidebar: {
-      width: "30%",
+}))
+const Sidebar = styled('div')(({ theme }) => ({
+   width: "30%",
       [theme.breakpoints.down("md")]: {
         width: "100%",
       },
@@ -30,22 +28,27 @@ import CoinInfo from '@/components/CoinInfo';
       alignItems: "center",
       marginTop: 25,
       borderRight: "2px solid grey",
-    },
-    heading: {
-      fontWeight: "800",
+}))
+
+const Typography = styled(MUITypography)(() => ({
+   fontWeight: "800",
       marginBottom: 20,
-      fontFamily: 'var(--montserrat)',
-    },
-    description: {
-      width: "100%",
+  fontFamily: 'var(--montserrat)',
+      
+}))
+
+const Description = styled(Typography)(() => ({
+     width: "100%",
       fontFamily: 'var(--montserrat)',
       padding: 25,
       paddingBottom: 15,
       paddingTop: 0,
-      textAlign: "justify",
-    },
-   marketData: {
-     alignSelf: "start",
+  textAlign: "justify",
+      fontWeight: 500,
+}))
+
+const MarketData = styled('div')(({ theme }) => ({
+ alignSelf: "start",
       padding: 25,
       paddingTop: 10,
       width: "100%",
@@ -62,14 +65,11 @@ import CoinInfo from '@/components/CoinInfo';
      [theme.breakpoints.down("xs")]: {
         alignItems: "start",
       },
-    },
-  }));
-
+}))
 
 const CoinPage = () => {
   const { coinId } = useParams();
   const [coin, setCoin] = useState<CoinInfoType>();
-  const classes = useStyles()
   const { currency, symbol } = useContext(CryptoContext)
   
   
@@ -93,8 +93,8 @@ const CoinPage = () => {
     <>
       <div style={{ backgroundColor: '#14161a'}}>
       <Header />
-      <div className={classes.container}>
-        <div className={classes.sidebar}>
+      <Div>
+        <Sidebar>
           <img
             src={coin.image.large}
             width={200}
@@ -103,15 +103,15 @@ const CoinPage = () => {
             style={{ marginBottom: '20px'}}
           />
 
-          <Typography variant='h3' className={classes.heading}> 
+          <Typography variant='h3'> 
             {coin?.name}
           </Typography>
-          <Typography variant='subtitle1' className={classes.description}>
+          <Description variant='subtitle1'>
             {coin?.description.en.split(". ")[0]}.
-          </Typography>
-          <div className={classes.marketData}>
+          </Description>
+          <MarketData>
             <span style={{ display: 'flex'}}>
-              <Typography variant='h5' className={classes.heading}>
+              <Typography variant='h5'>
                 Rank:
               </Typography>
               &nbsp; &nbsp;
@@ -121,7 +121,7 @@ const CoinPage = () => {
             </span>
 
             <span style={{ display: 'flex' }}>
-              <Typography variant='h5' className={classes.heading}>
+              <Typography variant='h5'>
                 Current Price:
               </Typography>
               &nbsp; &nbsp;
@@ -132,7 +132,7 @@ const CoinPage = () => {
             </span>
             
             <span style={{ display: 'flex' }}>
-              <Typography variant='h5'  className={classes.heading}>
+              <Typography variant='h5'>
                 Market Cap:
               </Typography>
               &nbsp; &nbsp;
@@ -141,10 +141,10 @@ const CoinPage = () => {
                 {marketCap?.toLocaleString().slice(0, -6)}
               </Typography>
             </span>
-          </div>
-        </div>
+          </MarketData>
+        </Sidebar>
         <CoinInfo coin={coin} />
-      </div>
+      </Div>
       </div>
     </>
   )

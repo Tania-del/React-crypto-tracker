@@ -1,92 +1,89 @@
 /* eslint-disable @next/next/no-img-element */
-import axios from 'axios'
-import React, { useContext, useEffect, useState } from 'react'
-import { TrendingCoins } from '../../config/api'
-import { CryptoContext } from '@/context/CryptoContext'
-import AliceCarousel from 'react-alice-carousel'
-import Link from 'next/link'
-import { CoinType } from '@/type/CoinType'
-import clsx from 'clsx'
-import { makeStyles } from '@mui/styles'
+import axios from "axios";
+import React, { useContext, useEffect, useState } from "react";
+import { TrendingCoins } from "../../config/api";
+import { CryptoContext } from "@/context/CryptoContext";
+import AliceCarousel from "react-alice-carousel";
+import Link from "next/link";
+import { CoinType } from "@/type/CoinType";
+import clsx from "clsx";
+import { styled } from "@mui/material";
 
+const CarouselWrapper = styled("div")(() => ({
+  height: "50%",
+  display: "flex",
+  alignItems: "center",
+}));
 
-
-     const useStyles = makeStyles((theme) => ({
-    carousel: {
-      height: "50%",
-      display: "flex",
-         alignItems: "center",
-        
-    },
-    carouselItem: {
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      cursor: "pointer",
-      textTransform: "uppercase",
-      color: "white",
-    },
-  }));
-
+const CarouselItem = styled(Link)(() => ({
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  cursor: "pointer",
+  textTransform: "uppercase",
+  color: "white",
+}));
 
 const Carousel = () => {
-     const classes = useStyles()
-  const { currency, symbol } = useContext(CryptoContext)
-  const [trending, setTrending] = useState([])
-
+  const { currency, symbol } = useContext(CryptoContext);
+  const [trending, setTrending] = useState([]);
 
   const fetchTrendingCoins = async () => {
     const { data } = await axios.get(TrendingCoins(currency));
-  
-    setTrending(data)
-  }
+
+    setTrending(data);
+  };
 
   useEffect(() => {
-    fetchTrendingCoins()
-  }, [currency])
+    fetchTrendingCoins();
+  }, [currency]);
 
   const responsive = {
-          0: {
-            items: 2,
-          },
-          
-        512: {
-        items: 4,
-          }
-  }
+    0: {
+      items: 2,
+    },
+
+    512: {
+      items: 4,
+    },
+  };
 
   const items = trending.map((coin: CoinType) => {
-
     const profit = coin.price_change_percentage_24h;
     const isPlus = profit > 0;
-   
+
     return (
-      <Link href={`/${coin?.id}`} key={coin.id}  className={classes.carouselItem}>
+      <CarouselItem href={`coins/${coin?.id}`} key={coin.id}>
         <img
           src={coin?.image}
           alt={coin?.name}
-          className='h-[80px] mb-[10px]'
+          className="h-[80px] mb-[10px]"
         />
-        <span className='font-roboto'>
+        <span className="font-roboto">
           {coin.symbol}
           &nbsp;
-          <span className={clsx('font-medium', isPlus ? 'text-green-500' : 'text-rose-600')} >
-            {profit > 0 && "+"}{`${profit.toFixed(2)}%`}
+          <span
+            className={clsx(
+              "font-medium",
+              isPlus ? "text-green-500" : "text-rose-600"
+            )}
+          >
+            {profit > 0 && "+"}
+            {`${profit.toFixed(2)}%`}
           </span>
         </span>
 
-        <span className='text-base font-roboto font-medium text-[22px]'>
+        <span className="text-base font-roboto font-medium text-[22px]">
           {symbol}
           &nbsp;
           {coin.current_price.toLocaleString()}
         </span>
-      </Link>
-      )
-  })
+      </CarouselItem>
+    );
+  });
 
-  
   return (
-    <div className={classes.carousel}>
+    <CarouselWrapper>
       <AliceCarousel
         mouseTracking
         infinite
@@ -97,10 +94,9 @@ const Carousel = () => {
         autoPlay
         items={items}
         disableButtonsControls
-        
       />
-    </div>
-  )
-}
+    </CarouselWrapper>
+  );
+};
 
 export default Carousel;
