@@ -4,7 +4,7 @@ import { CryptoContext } from '@/context/CryptoContext';
 import { CoinInfoType } from '@/type/CoinInfoType'
 import { CircularProgress, styled } from '@mui/material';
 import axios from 'axios';
-import React, { FC, useContext, useEffect, useState } from 'react'
+import React, { FC, useCallback, useContext, useEffect, useState } from 'react'
 import { Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -54,16 +54,15 @@ const CoinInfo: FC<ICoinInfo> = ({ coin }) => {
   const [days, setDays] = useState<number>(1)
   const { currency } = useContext(CryptoContext);
   
-  const fetchHistoricData = async () => {
+  const fetchHistoricData = useCallback(async () => {
     const { data } = await axios.get(HistoricalChart(coin.id, days, currency))
 
     setHistoricData(data.prices);
-  }
+  }, [coin.id, days, currency]) 
 
   useEffect(() => {
     fetchHistoricData()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[days])
+  },[fetchHistoricData])
       
   
   return (

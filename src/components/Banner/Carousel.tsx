@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { TrendingCoins } from "../../config/api";
 import { CryptoContext } from "@/context/CryptoContext";
 import AliceCarousel from "react-alice-carousel";
@@ -28,15 +28,15 @@ const Carousel = () => {
   const { currency, symbol } = useContext(CryptoContext);
   const [trending, setTrending] = useState([]);
 
-  const fetchTrendingCoins = async () => {
+  const fetchTrendingCoins = useCallback(async () => {
     const { data } = await axios.get(TrendingCoins(currency));
 
     setTrending(data);
-  };
+  }, [currency]) 
 
   useEffect(() => {
     fetchTrendingCoins();
-  }, [currency]);
+  }, [fetchTrendingCoins]);
 
   const responsive = {
     0: {

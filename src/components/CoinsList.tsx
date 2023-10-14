@@ -21,7 +21,7 @@ import {
 import axios from "axios";
 import clsx from "clsx";
 import { useRouter } from "next/navigation";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 
 const Row = styled(TableRow)(() => ({
   backgroundColor: "#16171a",
@@ -48,17 +48,17 @@ const CoinsList = () => {
   const router = useRouter();
   const params = useCustomSearchParams();
 
-  const fetchCoins = async () => {
+  const fetchCoins = useCallback(async () => {
     setLoading(true);
     const { data } = await axios.get(CoinList(currency));
 
     setCoins(data);
     setLoading(false);
-  };
+  }, [currency]) 
 
   useEffect(() => {
     fetchCoins();
-  }, [currency]);
+  }, [fetchCoins]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
